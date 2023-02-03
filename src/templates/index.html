@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+    <title>YouTube-DL</title>
+  </head>
+  <!-- https://getbootstrap.com/docs/5.3/examples/checkout/ -->
+  <body class="bg-light">
+    <div class="container">
+      <div class="py-5 col-12"><h1>Download a video</h1></div>
+      <div class="col-md-7 col-sm-12">
+        <form action="">
+          <div class="col-12">
+            <label for="url" class="form-label">Link to a video:</label>
+            <input
+              type="text"
+              id="url"
+              name="url"
+              class="form-control"
+              placeholder="eg: https://www.youtube.com/watch?v=56OViB-CHIY or 56OViB-CHIY"
+              required
+            />
+          </div>
+          <hr class="my-4" />
+          <div class="col-12">
+            <input
+              type="button"
+              class="w-100 btn btn-primary btn-lg"
+              value="Download"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
