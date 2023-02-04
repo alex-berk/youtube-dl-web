@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from controller import download as yt_download
+from controller import download as yt_download, get_download_status
 import json
 
 app = Flask(__name__)
@@ -21,7 +21,16 @@ def download():
         else:
             return "Couldn't parse video url", 400
     else:
-        return "bad request", 400
+        download_status = get_download_status()
+        if download_status:
+            return json.dumps({
+                "success": True,
+                "status": download_status.state,
+                "percentage_done": int(download_status.percentage_done),
+                "size_done": download_status.size_done,
+                "speed": download_status.speed,
+                "eta": download_status.eta,
+            })
 
 
 if __name__ == "__main__":
