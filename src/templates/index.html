@@ -50,14 +50,15 @@
   <body class="bg-light">
     <div class="container">
       <div class="row">
-        <div class="py-5 col-md-6">
+        <div class="pt-5 pb-4 col-md-6">
           <img
             src="{{url_for('static', filename='ytdl.png')}}"
             alt=""
             width="20%"
             class="mx-auto mb-4"
           />
-          <h1>Download a video</h1>
+          <h1>YouTube-dl</h1>
+          <p>Download a video from youtube, tik tok, twitter and more</p>
         </div>
       </div>
       <div class="col-md-7 col-sm-12">
@@ -74,6 +75,16 @@
             />
           </div>
           <hr class="my-4" />
+          <div
+            class="progress col-12 mb-2"
+            role="progressbar"
+            style="display: none"
+          >
+            <div
+              class="progress-bar progress-bar-striped progress-bar-animated"
+            ></div>
+          </div>
+          <div class="alert" role="alert" style="display: none"></div>
           <div class="col-12">
             <input
               type="submit"

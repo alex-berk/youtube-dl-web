@@ -7,6 +7,7 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def index():
+    # TODO: add links to recently downloaded
     return render_template("index.html")
 
 
@@ -16,22 +17,24 @@ def download():
         reqData = json.loads(request.data.decode())
         video_id = reqData.get("video_id")
         if video_id:
+            # TODO: add 'cancel download'
             yt_download(video_id)
             return json.dumps({"success": True})
         else:
             return "Couldn't parse video url", 400
     else:
         download_status = get_download_status()
+        # TODO: add a link to the video on success
         if download_status:
             return json.dumps({
                 "success": True,
-                "status": download_status.state,
-                "percentage_done": float(download_status.percentage_done),
+                "state": download_status.state,
+                "percentage_done": download_status.percentage_done,
                 "size_done": download_status.size_done,
                 "speed": download_status.speed,
                 "eta": download_status.eta,
             })
-        return "No updates", 204
+        return '{"success": false}', 204
 
 
 if __name__ == "__main__":

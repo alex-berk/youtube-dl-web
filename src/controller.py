@@ -25,11 +25,13 @@ def download(yt_id):
 # TODO: check progress_hooks, dump_single_json
 def parse_download_status(message):
     pattern = re.compile(
-        r".*\[(\w+)\] +([\d\.]+)% of ([\d\.]+\w+) at ([\d\.]+\w+)\/s ETA (\d{2}:\d{2})")
+        r".*\[(\w+)\] +([\d\.]+%) of ([\d\.]+\w+) at ([\d\.]+\w+)\/s ETA (\d{2}:\d{2})")
     match = re.match(pattern, message)
     if match:
-      download_status = DownloadStatus(*match.groups())
-      return download_status
+        download_status = DownloadStatus(*match.groups())
+        return download_status
+    if "[download] 100" in message or "[download] 100.0%" in message:
+        return DownloadStatus("completed", "100.0%", "", "", "",)
     return None
 
 
