@@ -13,3 +13,7 @@ autopep8 = "*"
 [requires]
 python_version = "3.11"
 python_full_version = "3.11.1"
+
+[scripts]
+build = "docker build . -t youtube-dl-web"
+start = "docker run -d --name youtube-dl-web -p 5070:5000 -v /Users/alex/Downloads:/usr/downloads youtube-dl-web"

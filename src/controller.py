@@ -13,7 +13,7 @@ ytdl_logger = Logger()
 
 current_dir = getcwd()
 downloads_dir = path.join(current_dir, "downloads/")
-out_template = downloads_dir + "%(id)s_%(title)s.%(ext)s"
+out_template = downloads_dir + "%(title)s-%(id)s.%(ext)s"
 
 ytdl = YoutubeDL({"outtmpl": out_template, "logger": ytdl_logger})
 
