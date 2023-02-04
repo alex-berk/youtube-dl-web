@@ -5,6 +5,11 @@ function postDownloadRequest(url, video_id) {
   });
 }
 
+async function checkDownloadStatus(url) {
+  response = await fetch(url, { method: "GET" });
+  console.log(response);
+}
+
 // DOM binding
 
 const elForm = document.querySelector("form");

@@ -26,11 +26,12 @@ def download():
             return json.dumps({
                 "success": True,
                 "status": download_status.state,
-                "percentage_done": int(download_status.percentage_done),
+                "percentage_done": float(download_status.percentage_done),
                 "size_done": download_status.size_done,
                 "speed": download_status.speed,
                 "eta": download_status.eta,
             })
+        return "No updates", 204
 
 
 if __name__ == "__main__":

@@ -27,8 +27,10 @@ def parse_download_status(message):
     pattern = re.compile(
         r".*\[(\w+)\] +([\d\.]+)% of ([\d\.]+\w+) at ([\d\.]+\w+)\/s ETA (\d{2}:\d{2})")
     match = re.match(pattern, message)
-    download_status = DownloadStatus(*match.groups())
-    return download_status
+    if match:
+      download_status = DownloadStatus(*match.groups())
+      return download_status
+    return None
 
 
 def get_download_status():
