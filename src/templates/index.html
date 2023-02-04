@@ -16,9 +16,19 @@
   <!-- https://getbootstrap.com/docs/5.3/examples/checkout/ -->
   <body class="bg-light">
     <div class="container">
-      <div class="py-5 col-12"><h1>Download a video</h1></div>
+      <div class="row">
+        <div class="py-5 col-md-6">
+          <img
+            src="{{url_for('static', filename='ytdl.png')}}"
+            alt=""
+            width="20%"
+            class="mx-auto mb-4"
+          />
+          <h1>Download a video</h1>
+        </div>
+      </div>
       <div class="col-md-7 col-sm-12">
-        <form action="">
+        <form action="/download">
           <div class="col-12">
             <label for="url" class="form-label">Link to a video:</label>
             <input
@@ -46,5 +56,6 @@
       integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
       crossorigin="anonymous"
     ></script>
+    <script defer src="{{url_for('static', filename='script.js')}}"></script>
   </body>
 </html>
