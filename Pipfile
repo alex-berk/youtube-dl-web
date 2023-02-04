@@ -16,4 +16,4 @@ python_full_version = "3.11.1"
 
 [scripts]
 build = "docker build . -t youtube-dl-web"
-start = "docker run -d --name youtube-dl-web -p 5070:5000 -v <YOU_DOWNLOADS_FOLDER_HERE>:/usr/downloads youtube-dl-web"
+start = "docker run -d --name youtube-dl-web -p 5070:5000 -v <YOU_DOWNLOADS_FOLDER_HERE>:/usr/downloads --restart always youtube-dl-web"
