@@ -17,5 +17,3 @@ python_full_version = "3.11.1"
 [scripts]
 build = "docker build . -t youtube-dl-web"
 start = "docker run -d --name youtube-dl-web -p 5070:5000 -v <YOU_DOWNLOADS_FOLDER_HERE>:/usr/downloads --restart always youtube-dl-web"
-delete_container = "docker rm $(docker stop youtube-dl-web)"
-launch = pipenv run delete_container || true && pipenv run build && pipenv run start
