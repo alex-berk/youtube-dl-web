@@ -35,7 +35,7 @@ def send_download_status():
 @app.route("/", methods=["GET"])
 def index():
     # TODO: add links to recently downloaded
-    return render_template("index.html", downloaded_videos=list(get_downloaded_items()))
+    return render_template("index.html", downloaded_videos=get_downloaded_items())
 
 
 @app.route("/download", methods=["GET", "POST"])
