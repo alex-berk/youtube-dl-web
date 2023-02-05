@@ -42,7 +42,7 @@ def get_download_status():
 def get_downloaded_items():
     downloads_files = listdir(downloads_dir)
     downloads_vids = list(
-        filter(lambda f: f.endswith(".mp4"), downloads_files))
+        filter(lambda f: f.endswith(".mp4") and not f.startswith("."), downloads_files))
     downloads_vids.sort(
         key=lambda x: path.getmtime(path.join(downloads_dir, x)), reverse=True)
     return downloads_vids
