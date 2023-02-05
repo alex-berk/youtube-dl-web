@@ -44,5 +44,5 @@ def get_downloaded_items():
     downloads_vids = list(
         filter(lambda f: f.endswith(".mp4") and not f.startswith("."), downloads_files))
     downloads_vids.sort(
-        key=lambda x: path.getmtime(path.join(downloads_dir, x)), reverse=True)
+        key=lambda x: path.getctime(path.join(downloads_dir, x)), reverse=True)
     return downloads_vids
