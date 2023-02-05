@@ -1,49 +1,88 @@
 {% extends "layout.html" %} {% block content %}
 <div class="container">
   <div class="row">
-    <div class="pt-5 pb-4 col-md-6">
-      <img
-        src="{{url_for('static', filename='ytdl.png')}}"
-        alt=""
-        width="20%"
-        class="mx-auto mb-4"
-      />
-      <h1>YouTube-dl</h1>
-      <p>Download a video from youtube, tik tok, twitter and more</p>
+    <div class="col-md-8 col-sm-12">
+      <div class="pt-5 pb-4 col-md-6">
+        <img
+          src="{{url_for('static', filename='ytdl.png')}}"
+          alt=""
+          width="20%"
+          class="mx-auto mb-4"
+        />
+        <h1>YouTube-dl</h1>
+        <p>Download a video from youtube, tik tok, twitter and more</p>
+      </div>
+      <div class="col-12">
+        <form action="/download">
+          <div class="col-12">
+            <label for="url" class="form-label">Link to a video:</label>
+            <input
+              type="text"
+              id="url"
+              name="url"
+              class="form-control"
+              placeholder="eg: https://www.youtube.com/watch?v=56OViB-CHIY or 56OViB-CHIY"
+              required
+            />
+          </div>
+          <hr class="my-4" />
+          <div
+            class="progress col-12 mb-2"
+            role="progressbar"
+            style="display: none"
+          >
+            <div
+              class="progress-bar progress-bar-striped progress-bar-animated"
+            ></div>
+          </div>
+          <div class="alert" role="alert" style="display: none"></div>
+          <div class="col-12">
+            <input
+              type="submit"
+              class="w-100 btn btn-primary btn-lg"
+              value="Download"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-12 pt-5">
+      {% if downloaded_videos|length > 0 %}
+      <div class="accordion">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button
+              class="accordion-button"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseOne"
+              aria-expanded="true"
+              aria-controls="collapseOne"
+            >
+              Downloaded Items
+            </button>
+          </h2>
+          <div
+            id="collapseOne"
+            class="accordion-collapse collapse show"
+            aria-labelledby="headingOne"
+            data-bs-parent="#accordionExample"
+          >
+            <div class="accordion-body list-group p-0">
+              {% for video_name in downloaded_videos[:10] %}
+              <a
+                class="list-group-item list-group-item-action"
+                href="/downloads/{{video_name}}"
+              >
+                {{video_name[:-4].rsplit("-", 1)[0] }}</a
+              >
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
     </div>
   </div>
-  <div class="col-md-7 col-sm-12">
-    <form action="/download">
-      <div class="col-12">
-        <label for="url" class="form-label">Link to a video:</label>
-        <input
-          type="text"
-          id="url"
-          name="url"
-          class="form-control"
-          placeholder="eg: https://www.youtube.com/watch?v=56OViB-CHIY or 56OViB-CHIY"
-          required
-        />
-      </div>
-      <hr class="my-4" />
-      <div
-        class="progress col-12 mb-2"
-        role="progressbar"
-        style="display: none"
-      >
-        <div
-          class="progress-bar progress-bar-striped progress-bar-animated"
-        ></div>
-      </div>
-      <div class="alert" role="alert" style="display: none"></div>
-      <div class="col-12">
-        <input
-          type="submit"
-          class="w-100 btn btn-primary btn-lg"
-          value="Download"
-        />
-      </div>
-    </form>
-  </div>
+  {% endblock %}
 </div>
-{% endblock %}

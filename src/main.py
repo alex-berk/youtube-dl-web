@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, send_from_directory
 import json
 from os import path, getcwd
-from controller import download as yt_download, get_download_status, ytdl_logger
+from controller import download as yt_download, get_download_status, ytdl_logger, get_downloaded_items
 
 app = Flask(__name__)
 
@@ -35,7 +35,7 @@ def send_download_status():
 @app.route("/", methods=["GET"])
 def index():
     # TODO: add links to recently downloaded
-    return render_template("index.html")
+    return render_template("index.html", downloaded_videos=list(get_downloaded_items()))
 
 
 @app.route("/download", methods=["GET", "POST"])

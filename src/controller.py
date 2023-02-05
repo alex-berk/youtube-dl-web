@@ -1,5 +1,5 @@
 from youtube_dl import YoutubeDL
-from os import getcwd, path
+from os import getcwd, path, listdir
 import re
 from collections import namedtuple
 from logger import Logger
@@ -37,3 +37,9 @@ def parse_download_status(message):
 
 def get_download_status():
     return parse_download_status(ytdl_logger.latest_message)
+
+
+def get_downloaded_items():
+    downloads_files = listdir(downloads_dir)
+    downloads_vids = filter(lambda f: f.endswith(".mp4"), downloads_files)
+    return downloads_vids
