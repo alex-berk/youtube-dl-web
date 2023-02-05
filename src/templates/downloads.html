@@ -1,0 +1,28 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container">
+  <div class="row">
+    <h1>Downloaded Items</h1>
+    <div class="accordion col-md-6 col-sm-12">
+      <div class="accordion-item">
+        <div
+          id="collapseOne"
+          class="accordion-collapse collapse show"
+          aria-labelledby="headingOne"
+          data-bs-parent="#accordionExample"
+        >
+          <div class="accordion-body list-group p-0">
+            {% for video_name in downloaded_videos %}
+            <a
+              class="list-group-item list-group-item-action"
+              href="/downloads/{{video_name}}"
+            >
+              {{video_name[:-4].rsplit("-", 1)[0] }}</a
+            >
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
