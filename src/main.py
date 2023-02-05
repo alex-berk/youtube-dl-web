@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request
-from controller import download as yt_download, get_download_status
+from flask import Flask, render_template, request, send_from_directory
 import json
+from os import path, getcwd
+from controller import download as yt_download, get_download_status, ytdl_logger
 
 app = Flask(__name__)
 
@@ -24,7 +25,6 @@ def download():
             return "Couldn't parse video url", 400
     else:
         download_status = get_download_status()
-        # TODO: add a link to the video on success
         if download_status:
             return json.dumps({
                 "success": True,
@@ -33,8 +33,15 @@ def download():
                 "size_done": download_status.size_done,
                 "speed": download_status.speed,
                 "eta": download_status.eta,
+                "filename": ytdl_logger.download_name
             })
         return '{"success": false}', 204
+
+
+@app.route("/downloads/<path:filename>")
+def download_file(filename):
+    downloads_folder = path.join(getcwd(), "downloads")
+    return send_from_directory(downloads_folder, filename)
 
 
 if __name__ == "__main__":

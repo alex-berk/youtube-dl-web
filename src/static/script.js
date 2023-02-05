@@ -45,12 +45,11 @@ const possibleAlertTypes = [
   "dark",
 ];
 function displayAlert(msg, type) {
-  console.log("displayAlert");
   if (!possibleAlertTypes.includes(type)) {
     type = "info";
   }
   elAlertBox.classList.add(`alert-${type}`);
-  elAlertBox.innerText = msg;
+  elAlertBox.innerHTML = msg;
   elAlertBox.style.display = "block";
 }
 
@@ -92,7 +91,10 @@ async function subscribeToDownloadStatus() {
   }
   updateProgressBar("100%");
   // await sleep(1000);
-  displayAlert("Video downloaded", "success");
+  displayAlert(
+    `Video downloaded<br /><a href='/downloads/${status.filename}' download>Download locally</a>`,
+    "success"
+  );
 }
 
 // DOM binding
