@@ -59,7 +59,7 @@
               aria-expanded="true"
               aria-controls="collapseOne"
             >
-              Downloaded Items
+              Latest Downloaded Items
             </button>
           </h2>
           <div
@@ -76,7 +76,7 @@
               >
                 {{video_name[:-4].rsplit("-", 1)[0] }}</a
               >
-              {% endfor %} {% if downloaded_videos|length > 0 %}
+              {% endfor %} {% if downloaded_videos|length > 10 %}
               <a
                 class="list-group-item list-group-item-action list-group-item-light"
                 href="{{url_for('downloads')}}"
