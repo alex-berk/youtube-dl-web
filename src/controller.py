@@ -4,12 +4,35 @@ import re
 from collections import namedtuple
 from logger import Logger
 
+ytdl_logger = Logger()
 
-DownloadStatus = namedtuple(
-    "download_status", ("state", "percentage_done", "size_done", "speed", "eta",))
+download_state = {}
+
+
+def processFilename(filename):
+    format, extension = filename.split(".")[-2:]
+    if format[0] == "f" and format[1:].isnumeric():
+        filename = filename.replace(f".{format}", "")
+    return filename.split("/")[-1]
+
+
+def update_download_state(message: dict) -> dict:
+    formatted_message = {k if not k.startswith(
+        "_") else k[1:]: v for k, v in message.items()}
+    formatted_message["filename"] = processFilename(
+        formatted_message["filename"])
+    # good sign that this thing should be a class
+    global download_state
+    download_state = formatted_message
+
+
+current_dir = getcwd()
+downloads_dir = path.join(current_dir, "downloads/")
+out_template = downloads_dir + "%(title)s-%(id)s.%(ext)s"
 
 # check "listformats" and "merge_output_format"
 format_mapping = {
+    "default": "best",
     "2160p": "401+140",
     "1440p": "400+140",
     "1080p": "137+140",
@@ -22,36 +45,22 @@ format_mapping = {
 }
 
 
-ytdl_logger = Logger()
-
-current_dir = getcwd()
-downloads_dir = path.join(current_dir, "downloads/")
-out_template = downloads_dir + "%(title)s-%(id)s.%(ext)s"
-
-ytdl = YoutubeDL({"outtmpl": out_template, "logger": ytdl_logger})
+ytdl_options = {
+    "outtmpl": out_template,
+    "logger": ytdl_logger,
+    "progress_hooks": (update_download_state,),
+}
+ytdl = YoutubeDL(ytdl_options)
 
 
 def download(yt_id, download=None):
-    video_format = format_mapping[download]
-    ytdl.params["format"] = video_format or "best"
+    video_format = format_mapping[download or "default"]
+    ytdl.params["format"] = video_format
     ytdl.download([yt_id])
 
 
-# TODO: check progress_hooks, dump_single_json
-def parse_download_status(message):
-    pattern = re.compile(
-        r".*\[(\w+)\] +([\d\.]+%) of ([\d\.]+\w+) at ([\d\.]+\w+)\/s ETA (\d{2}:\d{2})")
-    match = re.match(pattern, message)
-    if match:
-        download_status = DownloadStatus(*match.groups())
-        return download_status
-    if "[download] 100" in message or "[download] 100.0%" in message:
-        return DownloadStatus("completed", "100.0%", "", "", "",)
-    return None
-
-
 def get_download_status():
-    return parse_download_status(ytdl_logger.latest_message)
+    return download_state
 
 
 def get_downloaded_items():

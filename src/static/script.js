@@ -1,5 +1,7 @@
 const downloadEndpoint = "/download";
 let postProcessingRequired = false;
+let downloadRequestCompleted = false;
+let fileName;
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -58,11 +60,12 @@ function hideAlert() {
   elAlertBox.style.display = "none";
 }
 
-function postDownloadRequest(video_id) {
-  fetch(downloadEndpoint, {
+async function postDownloadRequest(video_id) {
+  await fetch(downloadEndpoint, {
     method: "POST",
     body: JSON.stringify({ video_id }),
   });
+  downloadRequestCompleted = true;
 }
 
 async function checkDownloadStatus() {
@@ -81,11 +84,13 @@ async function checkDownloadStatus() {
 async function subscribeToDownloadStatus() {
   hideAlert();
   let status;
-  let state = "download";
-  while (state == "download") {
-    await sleep(500);
+  while (!downloadRequestCompleted) {
+    await sleep(3000);
     status = await checkDownloadStatus();
     if (status.success) {
+      if (!fileName && status.filename) {
+        fileName = status.filename;
+      }
       state = status.state;
       updateProgressBar(status.percentage_done);
     } else continue;
@@ -93,7 +98,7 @@ async function subscribeToDownloadStatus() {
   updateProgressBar("100%");
   // await sleep(1000);
   displayAlert(
-    `Video downloaded<br /><a href='/downloads/${status.filename}' download>Download locally</a>`,
+    `Video downloaded<br /><a href='/downloads/${fileName}' download>Download locally</a>`,
     "success"
   );
 }
@@ -110,6 +115,8 @@ const elAlertBox = document.querySelector(".alert");
 // Event listeners
 
 elForm.onsubmit = async (event) => {
+  downloadRequestCompleted = false;
+  fileName = null;
   event.preventDefault();
 
   videoId = elUrlInput.value;
