@@ -12,11 +12,17 @@ function enableControls() {
   elDwnldBtn.value = "Download another one";
   elDwnldBtn.removeAttribute("disabled");
   elUrlInput.removeAttribute("disabled");
+  for (const b of elRadioButtons) {
+    b.removeAttribute("disabled");
+  }
 }
 
 function disableControls() {
   elUrlInput.setAttribute("disabled", "");
   elDwnldBtn.setAttribute("disabled", "");
+  for (const b of elRadioButtons) {
+    b.setAttribute("disabled", "");
+  }
   elDwnldBtn.value = "Downloading...";
 }
 
@@ -48,7 +54,7 @@ const possibleAlertTypes = [
   "dark",
 ];
 function displayAlert(msg, type) {
-  if (!possibleAlertTypes.includes(type)) {
+  if (!type || !possibleAlertTypes.includes(type)) {
     type = "info";
   }
   elAlertBox.classList.add(`alert-${type}`);
@@ -60,10 +66,14 @@ function hideAlert() {
   elAlertBox.style.display = "none";
 }
 
-async function postDownloadRequest(video_id) {
+function getCheckedRadioValue() {
+  return document.querySelector("input[type='radio']:checked").value;
+}
+
+async function postDownloadRequest(video_id, download_format) {
   await fetch(downloadEndpoint, {
     method: "POST",
-    body: JSON.stringify({ video_id }),
+    body: JSON.stringify({ video_id, download_format }),
   });
   downloadRequestCompleted = true;
 }
@@ -111,6 +121,7 @@ const elDwnldBtn = document.querySelector("input[type='submit']");
 const elProgressBarContainer = document.querySelector(".progress");
 const elProgressBar = document.querySelector(".progress-bar");
 const elAlertBox = document.querySelector(".alert");
+const elRadioButtons = document.querySelectorAll("input[type=radio]");
 
 // Event listeners
 
@@ -120,9 +131,10 @@ elForm.onsubmit = async (event) => {
   event.preventDefault();
 
   videoId = elUrlInput.value;
+  downloadFormat = getCheckedRadioValue();
   disableControls();
 
-  postDownloadRequest(videoId);
+  postDownloadRequest(videoId, downloadFormat);
   initProgressBar();
   await subscribeToDownloadStatus();
   enableControls();

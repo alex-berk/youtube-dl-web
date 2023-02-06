@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, send_from_directory
 import json
 from os import path, getcwd
-from controller import download as yt_download, get_download_status, get_downloaded_items
+from controller import download as yt_download, get_download_status, get_downloaded_items, format_mapping
 
 app = Flask(__name__)
 
@@ -37,7 +37,7 @@ def send_download_status():
 
 @app.route("/", methods=["GET"])
 def index():
-    return render_template("index.html", downloaded_videos=get_downloaded_items()[:11])
+    return render_template("index.html", downloaded_videos=get_downloaded_items()[:11], available_formats=format_mapping.keys())
 
 
 @app.route("/download", methods=["GET", "POST"])

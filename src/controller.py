@@ -32,6 +32,7 @@ out_template = downloads_dir + "%(title)s-%(id)s.%(ext)s"
 
 # check "listformats" and "merge_output_format"
 format_mapping = {
+    "audio": "140",
     "default": "best",
     "2160p": "401+140",
     "1440p": "400+140",
@@ -39,9 +40,9 @@ format_mapping = {
     "1080p60fps": "299+140",
     "720p60fps": "298+140",
     "480p": "135+140",
-    "360p": "134+140",
-    "240p": "133+140",
-    "144p": "160+140",
+    "360p": "134+250",
+    "240p": "133+249",
+    "144p": "160+249",
 }
 
 

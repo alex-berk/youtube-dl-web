@@ -25,6 +25,18 @@
               required
             />
           </div>
+          <div class="col-12 pt-2">
+            {% for format in available_formats %}
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio"
+              name="inlineRadioOptions" id="radio-{{format}}" value="{{format}}"
+              {% if format == "default"%}checked{% endif %} />
+              <label class="form-check-label" for="radio-{{format}}"
+                >{{format}}</label
+              >
+            </div>
+            {% endfor %}
+          </div>
           <hr class="my-4" />
           <div
             class="progress col-12 mb-2"
