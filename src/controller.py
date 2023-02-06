@@ -1,15 +1,19 @@
 from youtube_dl import YoutubeDL
 from os import getcwd, path, listdir
 import re
+import json
 from collections import namedtuple
+import multiprocessing
 from logger import Logger
 
+running_jobs = {}
 
 DownloadStatus = namedtuple(
     "download_status", ("state", "percentage_done", "size_done", "speed", "eta",))
 
-# check "listformats" and "merge_output_format"
+# TODO: check "listformats" and "merge_output_format"
 format_mapping = {
+    "default": "best",
     "2160p": "401+140",
     "1440p": "400+140",
     "1080p": "137+140",
@@ -32,9 +36,21 @@ ytdl = YoutubeDL({"outtmpl": out_template, "logger": ytdl_logger})
 
 
 def download(yt_id, download=None):
-    video_format = format_mapping[download]
-    ytdl.params["format"] = video_format or "best"
-    ytdl.download([yt_id])
+    video_format = format_mapping[download or "default"]
+    ytdl.params["format"] = video_format
+    process = multiprocessing.Process(target=ytdl.download, args=([yt_id,],))
+    running_jobs[yt_id] = process
+    running_jobs[yt_id].start()
+
+
+def cancel_download(request):
+    reqData = json.loads(request.data.decode())
+    yt_id = reqData.get("video_id")
+    try:
+        running_jobs.pop(yt_id).terminate()
+        return json.dumps({"success": True})
+    except KeyError:
+        return '{"success": false}', 204
 
 
 # TODO: check progress_hooks, dump_single_json

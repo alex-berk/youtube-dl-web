@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, send_from_directory
 import json
 from os import path, getcwd
-from controller import download as yt_download, get_download_status, ytdl_logger, get_downloaded_items
+from controller import download as yt_download, get_download_status, ytdl_logger, get_downloaded_items, cancel_download
 
 app = Flask(__name__)
 
@@ -11,7 +11,6 @@ def init_download(request):
     video_id = reqData.get("video_id")
     download_format = reqData.get("download_format")
     if video_id:
-        # TODO: add 'cancel download'
         yt_download(video_id, download_format)
         return json.dumps({"success": True})
     else:
@@ -38,10 +37,12 @@ def index():
     return render_template("index.html", downloaded_videos=get_downloaded_items()[:11])
 
 
-@app.route("/download", methods=["GET", "POST"])
+@app.route("/download", methods=["GET", "POST", "DELETE"])
 def download():
     if request.method == 'POST':
         return init_download(request)
+    elif request.method == "DELETE":
+        return cancel_download(request)
     else:
         return send_download_status()
 
