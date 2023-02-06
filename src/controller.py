@@ -8,6 +8,19 @@ from logger import Logger
 DownloadStatus = namedtuple(
     "download_status", ("state", "percentage_done", "size_done", "speed", "eta",))
 
+# check "listformats" and "merge_output_format"
+format_mapping = {
+    "2160p": "401+140",
+    "1440p": "400+140",
+    "1080p": "137+140",
+    "1080p60fps": "299+140",
+    "720p60fps": "298+140",
+    "480p": "135+140",
+    "360p": "134+140",
+    "240p": "133+140",
+    "144p": "160+140",
+}
+
 
 ytdl_logger = Logger()
 
@@ -18,7 +31,9 @@ out_template = downloads_dir + "%(title)s-%(id)s.%(ext)s"
 ytdl = YoutubeDL({"outtmpl": out_template, "logger": ytdl_logger})
 
 
-def download(yt_id):
+def download(yt_id, download=None):
+    video_format = format_mapping[download]
+    ytdl.params["format"] = video_format or "best"
     ytdl.download([yt_id])
 
 

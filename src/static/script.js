@@ -1,4 +1,5 @@
 const downloadEndpoint = "/download";
+let postProcessingRequired = false;
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));

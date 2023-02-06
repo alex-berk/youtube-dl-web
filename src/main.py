@@ -9,9 +9,10 @@ app = Flask(__name__)
 def init_download(request):
     reqData = json.loads(request.data.decode())
     video_id = reqData.get("video_id")
+    download_format = reqData.get("download_format")
     if video_id:
         # TODO: add 'cancel download'
-        yt_download(video_id)
+        yt_download(video_id, download_format)
         return json.dumps({"success": True})
     else:
         return "Couldn't parse video url", 400
