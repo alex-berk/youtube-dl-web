@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, send_from_directory
 import json
 from os import path, getcwd
-from controller import download as yt_download, get_download_status, ytdl_logger, get_downloaded_items, cancel_download
+from controller import download as yt_download, get_download_status, get_downloaded_items, cancel_download
 
 app = Flask(__name__)
 
@@ -20,15 +20,17 @@ def init_download(request):
 def send_download_status():
     download_status = get_download_status()
     if download_status:
-        return json.dumps({
-            "success": True,
-            "state": download_status.state,
-            "percentage_done": download_status.percentage_done,
-            "size_done": download_status.size_done,
-            "speed": download_status.speed,
-            "eta": download_status.eta,
-            "filename": ytdl_logger.download_name
-        })
+        return json.dumps(
+            {"success": True,
+             "state": download_status.get("status", None),
+             "percentage_done": download_status.get("percent_str", None),
+             "size_done": download_status.get("downloaded_bytes", None),
+             "size_total": download_status.get("total_bytes_str", None),
+             "speed": download_status.get("speed_str", None),
+             "eta": download_status.get("eta_str", None),
+             "elapsed": download_status.get("elapsed", None),
+             "filename": download_status.get("filename", None)}
+        )
     return '{"success": false}', 204
 
 
