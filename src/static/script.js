@@ -34,8 +34,6 @@ function initProgressBar() {
 
 function updateProgressBar(percentageDone) {
   elProgressBar.style.width = percentageDone;
-  elProgressBar.innerText = percentageDone;
-  ("100%");
   if (percentageDone == "100%") {
     elProgressBar.classList.add("bg-success");
     elProgressBar.classList.remove("progress-bar-animated");
@@ -57,9 +55,25 @@ function displayAlert(msg, type) {
   if (!type || !possibleAlertTypes.includes(type)) {
     type = "info";
   }
-  elAlertBox.classList.add(`alert-${type}`);
+  elAlertBox.className = `alert alert-${type}`;
   elAlertBox.innerHTML = msg;
   elAlertBox.style.display = "block";
+}
+
+function convertSecondsToTime(seconds) {
+  const readableMinutes = Math.floor(seconds / 60);
+  const readableSeconds = Math.floor((seconds - readableMinutes * 60) / 1);
+  return `${readableMinutes}:${readableSeconds}`;
+}
+
+function parseStatusInfo(status) {
+  const { percentage_done, size_total, speed, elapsed, eta } = status;
+  if (percentage_done && size_total && speed && elapsed && eta) {
+    const infoString = `Downloading - ${percentage_done} / ${size_total} at ${speed}.<br/>Elapsed: ${convertSecondsToTime(
+      elapsed
+    )}, ETA: ${eta}`;
+    return infoString;
+  }
 }
 
 function hideAlert() {
@@ -103,6 +117,8 @@ async function subscribeToDownloadStatus() {
       }
       state = status.state;
       updateProgressBar(status.percentage_done);
+      const info = parseStatusInfo(status);
+      displayAlert(info, "light");
     } else continue;
   }
   updateProgressBar("100%");
